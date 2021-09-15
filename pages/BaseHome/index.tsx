@@ -41,9 +41,9 @@ const BaseHome: React.FunctionComponent<Props> = ({
       {/* <ThemeToggle updateTheme={updateTheme} /> */}
       {/* <ImageComponent src={constants.recraftLogo}/> */}
         <ImageBackground source={ImagePath} style={{ width: '100%', height: '100%' }} >
-            <View style={style.topContainer}> 
+            {/* <View style={style.topContainer}> 
               <Image source={constants.recraftLogo} style={[style.logoImage ,{width: 300, height: 300}]}/>
-            </View>
+            </View> */}
             <View style={style.secondContainer}>
               <RoundButton buttonStyle={style.button} label="LOGIN" onPress={goToLogin} />
               <RoundButton buttonStyle={style.button} label="SIGN UP" onPress={goToSignUp} />

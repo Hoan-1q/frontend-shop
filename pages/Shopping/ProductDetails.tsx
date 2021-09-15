@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { RouteComponentProps } from 'react-router-native';
 import { Dispatch } from 'redux';
-import { View, ViewStyle, StyleSheet, TextStyle, ImageBackground, Text, Dimensions, TouchableOpacity } from 'react-native';
+import { View, ViewStyle, StyleSheet, TextStyle, ImageBackground, Text, Dimensions, TouchableOpacity, Image } from 'react-native';
 import { AppConstants, AppTheme } from '../../config/DefaultConfig';
 import useConstants from '../../hooks/useConstants';
 import RoundButton from '../../components/Base/RoundButton';
@@ -25,11 +25,11 @@ const ImagePath = require("../../images/shopping.jpg")
 const ImageShopping = require("../../images/shoppingGirl.jpg")
 
 const productData = {
-    name: "Colorfull Styles Top",
+    name: "Apple AirPods Pro",
     price: "$20",
-    images: [ImagePath, ImageShopping, ImagePath, ImageShopping],
-    idealFor: 'woman',
-    color: ['red', 'blue', 'black', 'green'],
+    // images: [ImagePath, ImageShopping, ImagePath, ImageShopping],
+    // idealFor: 'woman',
+    // color: ['red', 'blue', 'black', 'green'],
     size: ['XS', 'S', 'M', 'L', 'XL', 'XXL']
 }
 
@@ -42,6 +42,7 @@ const ProductDetails: React.FunctionComponent<Props> = ({
     const [open, setOpen] = useState(false);
 
     const backButton = () => {
+        console.log('test');
         history.push('/shopping/')
     }
 
@@ -88,6 +89,7 @@ const ProductDetails: React.FunctionComponent<Props> = ({
         <View style={style.mainContainer}>
             <BackButton onPress={backButton} />
             <View style={style.row1}>
+                <Image style={[style.newItem]} source={ImagePath} />
                 {/* <CarouselComponent>
                     {renderImageList(productData.images)}
                 </CarouselComponent> */}
@@ -96,8 +98,8 @@ const ProductDetails: React.FunctionComponent<Props> = ({
                 <View style={style.row2_Child}>
                     <Text style={style.productName}>{productData.name}</Text>
                     <Text style={style.productPrice}>{productData.price}</Text>
-                    {selectColors(productData.color)}
-                    {selectSizes(productData.size)}
+                    {/* {selectColors(productData.color)} */}
+                    {/* {selectSizes(productData.size)} */}
                 </View>
 
             </View>
@@ -120,6 +122,7 @@ interface Style {
     mainContainer: ViewStyle;
     row1: ViewStyle;
     row2: ViewStyle;
+    newItem: ViewStyle;
     carouselRow: TextStyle;
     row2_Child: ViewStyle;
     productName: TextStyle;
@@ -138,6 +141,13 @@ const style: Style = StyleSheet.create<Style>({
         margin: 0,
         flex: 1,
         zIndex: -1,
+    },
+    newItem: {
+        marginLeft: 6,
+        marginRight: 6,
+        width: 150,
+        height: 120,
+        borderRadius: 15
     },
     row1: {
         flex: 4,

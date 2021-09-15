@@ -51,7 +51,7 @@ const Checkout: React.FunctionComponent<Props> = ({
               <ThemedText styleKey="textColor" style={style.content}>Shipping</ThemedText>
             </View>
             <View style={[style.childContainer, style.centerContainer, {flex: 4}]}>
-              <ThemedText styleKey="textColor" style={[style.content, {alignSelf: 'flex-start'}]}>4582 Monroa Avenue, Tampa, Florida, 33607,</ThemedText>
+              <ThemedText styleKey="textColor" style={[style.content, {alignSelf: 'flex-start'}]}>72 Van Chuong 2 Dong Da Ha Noi</ThemedText>
             </View>
             <View style={[style.childContainer, style.rightContainer, {flex: 1}]}>
               <TouchableOpacity>

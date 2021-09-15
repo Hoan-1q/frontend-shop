@@ -23,7 +23,7 @@ interface Props extends RouteComponentProps {
 }  
 
 // @ts-ignore
-const ImagePath = require("../../images/shopping.jpg")
+const ImagePath = require("../../images/user.jpg")
 
 const Profile: React.FunctionComponent<Props> = ({
     dispatch,
@@ -66,7 +66,7 @@ const Profile: React.FunctionComponent<Props> = ({
                 <Image source={ImagePath} style={[style.imageStyle, {borderRadius: 10}]}/>
             </View>
             <View style={[style.childContainer, style.centerContainer, style.extraContainer]}>
-              <ThemedText styleKey="textColor" style={{fontSize: 24, paddingTop: 10}}>Yogesh Kapoor</ThemedText>
+              <ThemedText styleKey="textColor" style={{fontSize: 24, paddingTop: 10}}>Hoan</ThemedText>
               <View style={[style.buttonStyle, {backgroundColor: theme.highlightColor}]}>
                 <TouchableOpacity>
                   <ThemedText styleKey="highlightTextColor" style={{fontSize: 18}}>Edit Account</ThemedText>
@@ -84,7 +84,7 @@ const Profile: React.FunctionComponent<Props> = ({
             <ThemedText styleKey="textColor" style={{fontSize: 18}}>Default Language</ThemedText>
             </View>
             <View style={[style.childContainer, style.rightContainer]}>
-              <LanguageSelector updateLanguage={updateLanguage} />
+              {/* <LanguageSelector updateLanguage={updateLanguage} /> */}
             </View>
           </View>
         </View>
@@ -111,7 +111,7 @@ const Profile: React.FunctionComponent<Props> = ({
           </View>
         </View>
       </ScrollView>
-      <FooterNavigation history={history} />
+      {/* <FooterNavigation history={history} /> */}
     </View>
   );
 };

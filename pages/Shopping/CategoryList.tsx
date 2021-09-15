@@ -8,7 +8,7 @@ import useTheme from "../../hooks/useTheme";
 
 interface Props extends RouteComponentProps {}
 
-const typeList = ["Woman", "Man", "Kids"]
+const typeList = ["Headphone", "Chargers", "Phone Cases"]
 
 const CategoryList: React.FunctionComponent<Props> = ({}: Props) => {
     const constants: AppConstants = useConstants();

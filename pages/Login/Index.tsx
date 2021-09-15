@@ -1,7 +1,7 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router-native';
 import { Dispatch } from 'redux';
-import { View, ViewStyle, StyleSheet, TextStyle, TextInput, ImageBackground, ScrollView, TouchableOpacity } from 'react-native';
+import { View, ViewStyle, StyleSheet, TextStyle, TextInput, ImageBackground, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { AppConstants, AppTheme } from '../../config/DefaultConfig';
 import ThemedText from '../../components/UI/ThemedText';
 import useConstants from '../../hooks/useConstants';
@@ -11,6 +11,7 @@ import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import useTheme from '../../hooks/useTheme';
 import { AppLanguage } from '../../config/languages';
 import useLanguage from '../../hooks/useLanguage';
+import { Formik } from 'formik';
 
 // @ts-ignore
 const ImagePath = require("../../images/Recraftsoppify_aap_bg_effect.png")
@@ -31,57 +32,90 @@ const Login: React.FunctionComponent<Props> = ({
     history.push('/')
   }
 
-  const submitButton = () => {
+  const submitButton = async (values: {username: string, password: string}) => {
+    // const res = await fetch("http://192.168.1.3:3000/api/login",
+    // {
+    //     headers: {
+    //       'Accept': 'application/json',
+    //       'Content-Type': 'application/json'
+    //     },
+    //     method: "POST",
+    //     body: JSON.stringify({username: values.username, password: values.password})
+    // })
+    // console.log(res);
     history.push('/home/')
   }
 
   return (
     <ImageBackground source={ImagePath} style={{ width: '100%', height: '100%' }} >
       <TouchableOpacity onPress={backButton}>
-        <MaterialIcon name="arrow-left" size={30} color={theme.textColor} style={style.backIcon}/>
+        <MaterialIcon name="arrow-left" size={30} color={theme.textColor} style={style.backIcon} />
       </TouchableOpacity>
       <ScrollView>
-        <View style={style.container}>
-          <View style={style.topContainer}>
-            <ThemedText styleKey="appColor" style={style.title}>{language.labelLogin}</ThemedText>
-          </View>
-          <View style={style.childContainer}>
-            <ThemedText style={style.inputLabel} styleKey="inputColor">{language.labelUser}</ThemedText>
-          </View>
-          <View style={style.childContainer}>
-            <TextInput
-              style={[style.inputContainer, {borderBottomColor: theme.inputBorderColor, color: theme.textColor}]}
-              placeholderTextColor={theme.lightTextColor}
-              placeholder={language.userPlaceholder}
-            />
-          </View>
-          <View style={style.childContainer}>
-            <ThemedText style={style.inputLabel} styleKey="inputColor">{language.labelPass}</ThemedText>
-          </View>
-          <View style={style.childContainer}>
-            <TextInput
-              style={[style.inputContainer, {borderBottomColor: theme.inputBorderColor, color: theme.textColor}]}
-              placeholderTextColor={theme.lightTextColor}
-              placeholder={language.passPlaceholder}
-              secureTextEntry={true}
-            />
-          </View>
-          <View style={style.childContainer}>
-            <ThemedText style={style.forgotPassword} styleKey="textColor" onPress={() => { alert("ji") }}>{language.labelForget}</ThemedText>
-          </View>
-          <RoundButton label={language.labelSubmit} buttonStyle={{minWidth: 230}} onPress={submitButton} />
-          <View style={style.childContainer}>
-            <ThemedText style={style.forgotPassword} styleKey="textColor">{language.labelChoice}</ThemedText>
-          </View>
-          <View style={style.childContainer}>
-            <View style={[style.iconContainer, { shadowColor: theme.labelBgColor, backgroundColor: theme.googleColor }]}>
-              <Icon name="google" size={30} color={theme.highlightTextColor} style={style.Icon} onPress={() => { alert("google") }} />
+        <Formik
+          initialValues={{ username: '', password: '' }}
+          onSubmit={values => submitButton(values) }
+        >
+          {({ handleChange, handleBlur, handleSubmit, values }) => (
+            // <View>
+            //   <TextInput
+            //     onChangeText={handleChange('email')}
+            //     onBlur={handleBlur('email')}
+            //     value={values.email}
+            //   />
+            //   <Button onPress={handleSubmit} title="Submit" />
+            // </View>
+
+            <View style={style.container}>
+
+              <View style={style.topContainer}>
+                <ThemedText styleKey="appColor" style={style.title}>{language.labelLogin}</ThemedText>
+              </View>
+              <View style={style.childContainer}>
+                <ThemedText style={style.inputLabel} styleKey="inputColor">{language.labelUser}</ThemedText>
+              </View>
+              <View style={style.childContainer}>
+                <TextInput
+                  style={[style.inputContainer, { borderBottomColor: theme.inputBorderColor, color: theme.textColor }]}
+                  placeholderTextColor={theme.lightTextColor}
+                  placeholder={language.userPlaceholder}
+                  onChangeText={handleChange('username')}
+                  onBlur={handleBlur('username')}
+                  value={values.username}
+                />
+              </View>
+              <View style={style.childContainer}>
+                <ThemedText style={style.inputLabel} styleKey="inputColor">{language.labelPass}</ThemedText>
+              </View>
+              <View style={style.childContainer}>
+                <TextInput
+                  style={[style.inputContainer, { borderBottomColor: theme.inputBorderColor, color: theme.textColor }]}
+                  placeholderTextColor={theme.lightTextColor}
+                  placeholder={language.passPlaceholder}
+                  secureTextEntry={true}
+                  value={values.password}
+                  onBlur={handleBlur('password')}
+                  onChangeText={handleChange('password')}
+                />
+              </View>
+              <View style={style.childContainer}>
+                <ThemedText style={style.forgotPassword} styleKey="textColor" onPress={() => { alert("ji") }}>{language.labelForget}</ThemedText>
+              </View>
+              <RoundButton label={language.labelSubmit} buttonStyle={{ minWidth: 230 }} onPress={handleSubmit} />
+              <View style={style.childContainer}>
+                <ThemedText style={style.forgotPassword} styleKey="textColor">{language.labelChoice}</ThemedText>
+              </View>
+              <View style={style.childContainer}>
+                <View style={[style.iconContainer, { shadowColor: theme.labelBgColor, backgroundColor: theme.googleColor }]}>
+                  <Icon name="google" size={30} color={theme.highlightTextColor} style={style.Icon} onPress={() => { alert("google") }} />
+                </View>
+                <View style={[style.iconContainer, { shadowColor: theme.labelBgColor, backgroundColor: theme.facebookColor }]}>
+                  <Icon name="facebook" size={30} color={theme.highlightTextColor} style={[style.Icon]} onPress={() => { alert("google") }} />
+                </View>
+              </View>
             </View>
-            <View style={[style.iconContainer, { shadowColor: theme.labelBgColor, backgroundColor: theme.facebookColor }]}>
-              <Icon name="facebook" size={30} color={theme.highlightTextColor} style={[style.Icon]} onPress={() => { alert("google") }}/>
-            </View>
-          </View>
-        </View>
+          )}
+        </Formik>
       </ScrollView>
     </ImageBackground>
   )

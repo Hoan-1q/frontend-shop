@@ -13,7 +13,7 @@ interface Props extends RouteComponentProps {
     history: any;
 }
 
-const typeList = ["Woman", "Man", "Kids"]
+const typeList = ["Headphone", "Chargers", "Phone Cases"]
 
 // @ts-ignore
 const ImagePath = require("../../images/shopping.jpg")
@@ -35,7 +35,7 @@ const HomePageProducts: React.FunctionComponent<Props> = ({
     return (
         <View style={style.secondView}>
             <View style={style.typeList}>
-                <CategoryList />
+                {/* <CategoryList /> */}
             </View>
             <View style={style.newItemList}>
                 <View style={style.newItemListLabel}>

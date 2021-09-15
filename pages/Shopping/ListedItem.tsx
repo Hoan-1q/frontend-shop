@@ -11,17 +11,17 @@ interface Props {
 
 const productList = [
     {
-        name: "Top heavy bag",
+        name: "Apple AirPods Pro",
         price: 20,
         currency: '$'
     },
     {
-        name: "Top heavy bag",
+        name: "Apple AirPods Pro",
         price: 30,
         currency: '$',
     },
     {
-        name: "Top heavy bag",
+        name: "Apple AirPods Pro",
         price: 40,
         currency: '$',
     }

@@ -20,7 +20,7 @@ const LanguageSelector: React.FunctionComponent<Props> = ({
 
   const languages = [
     { label: 'English', value: 'en' },
-    { label: 'French', value: 'fr' },
+    { label: 'Vietnamese', value: 'vn' },
     { label: 'German', value: 'gr' },
     { label: 'Spanish', value: 'sp' },
     { label: 'Chinese', value: 'ch' },
