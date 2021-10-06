@@ -32,7 +32,7 @@ const Home: React.FunctionComponent<Props> = ({
  
     return (
         <View style={style.mainContainer}>
-            <View style={style.fistView}>
+            {/* <View style={style.fistView}>
                 <ImageBackground source={ImagePath} style={{ width: '100%', height: '100%' }} >
                     <View style={style.fistViewContent}>
                         <Text style={[style.fistViewText, { color: theme.labelBgColor }]}>{constants.homePage.labelFashion}</Text>
@@ -40,7 +40,7 @@ const Home: React.FunctionComponent<Props> = ({
                         <RoundButton buttonStyle={[style.fistViewButton, { backgroundColor: theme.dangerColor, borderColor: theme.dangerColor }]} labelStyle={{ fontSize: 17, color: theme.labelBgColor }} label={language.labelCheck} onPress={gotoProducts} />
                     </View>
                 </ImageBackground>
-            </View>
+            </View> */}
             <HomePageProducts history={history}/>
             <FooterNavigation history={history} />
         </View>

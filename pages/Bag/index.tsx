@@ -1,4 +1,5 @@
 import React from 'react';
+import { Dispatch } from 'redux';
 import { RouteComponentProps } from 'react-router-native';
 import { AppTheme, AppConstants } from '../../config/DefaultConfig';
 import useConstants from '../../hooks/useConstants';
@@ -11,12 +12,15 @@ import BagItem from '../../components/Base/BagItem';
 import BagOption from '../../components/Base/BagOption';
 import { AppLanguage } from '../../config/languages';
 import useLanguage from '../../hooks/useLanguage';
+import { connect } from 'react-redux';
 
 interface Props extends RouteComponentProps {
+  dispatch: Dispatch,
   history
 }
 
 const Bag: React.FunctionComponent<Props> = ({
+  dispatch,
   history
 }: Props) => {
   const constants: AppConstants = useConstants();
@@ -30,6 +34,10 @@ const Bag: React.FunctionComponent<Props> = ({
   const goToCheckout = () => {
     history.push('/checkout')
   }
+
+  React.useEffect(() => {
+    console.log(constants.carts);
+  })
 
   return (
     <View style={style.mainContainer}>
@@ -45,11 +53,12 @@ const Bag: React.FunctionComponent<Props> = ({
               <ThemedText styleKey="textColor" style={style.title}>{language.labelBag}</ThemedText>
             </View>
           </View>
-          <BagItem size="M" color={theme.lightTextColor}/>
         </View>
-        <View style={[style.contentContainer, {borderColor: theme.lightTextColor}]}>
-          <BagItem size="L" color={theme.dangerColor}/>
-        </View>
+        {/* {constants.carts.map((product, index) => (
+          <View>
+            <BagItem data={product}/>
+          </View>
+        ))} */}
         <BagOption label={language.labelDelivery} total="Standard - Free" />
         <BagOption label={language.labelTotal} total="$25.98" />
         <View style={style.footerContainer}>
@@ -67,7 +76,7 @@ const Bag: React.FunctionComponent<Props> = ({
   );
 };
 
-export default Bag;
+export default connect(({ dispatch}) => ({ dispatch }))(Bag);
 
 interface Style {
   mainContainer: ViewStyle;

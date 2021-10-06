@@ -11,6 +11,8 @@ import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import useTheme from '../../hooks/useTheme';
 import { AppLanguage } from '../../config/languages';
 import useLanguage from '../../hooks/useLanguage';
+import { Formik } from 'formik';
+import { register } from '../../store/api/users';
 
 interface Props extends RouteComponentProps {
     dispatch: Dispatch,
@@ -35,8 +37,28 @@ const CreateAccount: React.FunctionComponent<Props> = ({
     history.push('/')
   }
 
-  const gotoHome = () => {
-    history.push('/home')
+  const submitButton = async (values: {name: string, username: string, password: string,phone: string, email: string}) => {
+    const { name, username, password, phone, email } = values
+    const res = await register(name, username, password, phone, email);
+    switch (res.statusText) {
+      case 'account already in use':
+        alert('Tài khoản của bạn đã tồn tại vui lòng thử lại')
+        break;
+  
+      case 'error':
+        alert('xảy ra lỗi vui lòng thử lại')
+        break;
+      
+      default:
+        history.push('/')
+        break;
+    }
+    // if (res.statusText === 'done') {
+    //   history.push('/')
+    // }
+    // if (res.statusText === 'account already in use') {
+    //   alert('Tài khoản của bạn đã tồn tại vui lòng thử lại')
+    // }
   }
 
   return (
@@ -45,6 +67,11 @@ const CreateAccount: React.FunctionComponent<Props> = ({
           <MaterialIcon name="arrow-left" size={30} color={theme.textColor} style={style.backIcon}/>
         </TouchableOpacity>
       <ScrollView style={style.mainContainer}>
+      <Formik
+          initialValues={{ name: '', username: '', password: '', phone: '', email: ''}}
+          onSubmit={values => submitButton(values) }
+        >
+          {({ handleChange, handleBlur, handleSubmit, values }) => (
       <View style={style.container}>
         <View style={style.topContainer}>
           <ThemedText styleKey="appColor" style={style.title}>{language.createAccountLabel}</ThemedText>
@@ -57,6 +84,9 @@ const CreateAccount: React.FunctionComponent<Props> = ({
             style={[style.inputContainer, {borderBottomColor: theme.inputBorderColor, color: theme.textColor}]}
             placeholderTextColor={theme.lightTextColor}
             placeholder={language.namePlaceholder}
+            onChangeText={handleChange('name')}
+            onBlur={handleBlur('name')}
+            value={values.name}
           />
         </View>
         <View style={style.childContainer}>
@@ -66,7 +96,23 @@ const CreateAccount: React.FunctionComponent<Props> = ({
           <TextInput
             style={[style.inputContainer, {borderBottomColor: theme.inputBorderColor, color: theme.textColor}]}
             placeholderTextColor={theme.lightTextColor}
+            placeholder={language.labelUser}
+            value={values.username}
+            onBlur={handleBlur('username')}
+            onChangeText={handleChange('username')}
+          />
+        </View>
+        <View style={style.childContainer}>
+          <ThemedText style={style.inputLabel} styleKey="inputColor">{language.labelEmail}</ThemedText>
+        </View>
+        <View style={style.childContainer}>
+          <TextInput
+            style={[style.inputContainer, {borderBottomColor: theme.inputBorderColor, color: theme.textColor}]}
+            placeholderTextColor={theme.lightTextColor}
             placeholder={language.emailPlaceholder}
+            value={values.email}
+            onBlur={handleBlur('email')}
+            onChangeText={handleChange('email')}
           />
         </View>
         <View style={style.childContainer}>
@@ -78,12 +124,28 @@ const CreateAccount: React.FunctionComponent<Props> = ({
             placeholderTextColor={theme.lightTextColor}
             placeholder={language.passPlaceholder}
             secureTextEntry={true}
+            value={values.password}
+            onBlur={handleBlur('password')}
+            onChangeText={handleChange('password')}
+          />
+        </View>
+        <View style={style.childContainer}>
+          <ThemedText style={style.inputLabel} styleKey="inputColor">{language.labelPhone}</ThemedText>
+        </View>
+        <View style={style.childContainer}>
+          <TextInput
+            style={[style.inputContainer, {borderBottomColor: theme.inputBorderColor, color: theme.textColor}]}
+            placeholderTextColor={theme.lightTextColor}
+            placeholder={language.phonePlaceholder}
+            value={values.phone}
+            onBlur={handleBlur('phone')}
+            onChangeText={handleChange('phone')}
           />
         </View>
         <View style={style.childContainer}>
           <ThemedText style={style.forgotPassword} styleKey="textColor" onPress={goToLogin}>{language.labelCheckAcc}</ThemedText>
         </View>
-        <RoundButton label={language.labelSubmit} buttonStyle={{minWidth: 230}} onPress={gotoHome} />
+        <RoundButton label={language.labelSubmit} buttonStyle={{minWidth: 230}} onPress={handleSubmit} />
         <View style={style.childContainer}>
           <ThemedText style={style.forgotPassword} styleKey="textColor">{language.labelChoice}</ThemedText>
         </View>
@@ -96,6 +158,8 @@ const CreateAccount: React.FunctionComponent<Props> = ({
           </View>
         </View>
       </View>
+      )}
+      </Formik>
       </ScrollView>
     </ImageBackground>
   )

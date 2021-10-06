@@ -1,44 +1,51 @@
 import React from 'react';
 import { View, ViewStyle, StyleSheet, TextStyle, Text, ScrollView } from 'react-native';
-import { AppConstants, AppTheme } from '../../config/DefaultConfig';
+import { AppConstants, AppTheme, productsType } from '../../config/DefaultConfig';
 import useConstants from '../../hooks/useConstants';
 import useTheme from "../../hooks/useTheme";
 import Product from './Product';
 
 interface Props { 
     history: any;
+    productList: productsType[]
 }
 
-const productList = [
-    {
-        name: "Apple AirPods Pro",
-        price: 20,
-        currency: '$'
-    },
-    {
-        name: "Apple AirPods Pro",
-        price: 30,
-        currency: '$',
-    },
-    {
-        name: "Apple AirPods Pro",
-        price: 40,
-        currency: '$',
-    }
-]
+// const productList = [
+//     {
+//         name: "Apple AirPods Pro",
+//         price: 20,
+//         currency: '$'
+//     },
+//     {
+//         name: "Apple AirPods Pro",
+//         price: 30,
+//         currency: '$',
+//     },
+//     {
+//         name: "Apple AirPods Pro",
+//         price: 40,
+//         currency: '$',
+//     }
+// ]
 
 // @ts-ignore
 const ImagePath = require("../../images/shopping.jpg");
 
 
 const Shopping: React.FunctionComponent<Props> = ({
+    productList,
     history,
 }: Props) => {
     const constants: AppConstants = useConstants();
     const theme: AppTheme = useTheme();
 
-    const goToDetails = () => {
-        history.push("/productDetails/")
+    const goToDetails = (id: number) => {
+        history.push({
+            pathname: "/productDetails",
+            state: {
+            id: id
+            }
+        })
     }
     return (
         <View style={style.newItemList}>
@@ -50,12 +57,12 @@ const Shopping: React.FunctionComponent<Props> = ({
                     {productList.map((res, index) => {
                         return (<View key={index}>
                             <Product 
-                                imageUrl= {ImagePath}
-                                goToDetails={goToDetails}
+                                imageUrl= {res.avatar}
+                                goToDetails={() => goToDetails(res.id)}
                             />
                             <View style={style.productInfo}>
-                                <Text style={style.productInfoText}>{res.name}</Text>
-                                <Text style={[style.productInfoText, { color: theme.dangerColor }]}>Price {res.currency + res.price}</Text>
+                                <Text style={style.productInfoText}>{res.title}</Text>
+                                <Text style={[style.productInfoText, { color: theme.dangerColor }]}>Price {res.price} VND</Text>
                             </View>
                         </View>
                         )
@@ -131,6 +138,7 @@ const style: Style = StyleSheet.create<Style>({
         paddingLeft: 6,
         paddingRight: 8,
         fontSize: 20,
+        maxWidth: 180,
     },
     productInfoText: {
         fontSize: 16,

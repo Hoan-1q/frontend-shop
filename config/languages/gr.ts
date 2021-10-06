@@ -19,6 +19,7 @@ export const gr: AppLanguage = {
   labelMethod: "Zahlungsmethode",
   labelCard: "KARTE HINZUFÜGEN",
   labelName: "Name",
+  labelPhone: "Phone number",
   labelEmail: "Email",
   labelUser: "Nutzername",
   labelPass: "Passwort",

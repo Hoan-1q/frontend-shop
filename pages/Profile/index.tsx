@@ -10,15 +10,16 @@ import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ThemedText from '../../components/UI/ThemedText';
 import FooterNavigation from '../Footer/Index';
 import ProfileItem from '../../components/Base/ProfileItem';
-import { setThemeAction, setLanguageAction } from '../../store/reducers/config';
+import { setThemeAction, setLanguageAction, getUser, setUserAction } from '../../store/reducers/config';
 import ThemeToggle from '../../components/Base/ThemeToggle';
 import LanguageSelector from '../../components/Base/LanguageSelector';
 import { ThemeKey } from '../../config/themes';
 import { AppLanguage, LanguageKey } from '../../config/languages';
 import useLanguage from '../../hooks/useLanguage';
+import store from '../../store';
 
 interface Props extends RouteComponentProps {
-    dispatch: Dispatch
+    dispatch: Dispatch,
     history
 }  
 
@@ -27,12 +28,13 @@ const ImagePath = require("../../images/user.jpg")
 
 const Profile: React.FunctionComponent<Props> = ({
     dispatch,
-    history
+    history,
+
 }: Props) => {
   const constants: AppConstants = useConstants();
+  const state = store.getState();
   const theme: AppTheme = useTheme();
   const language: AppLanguage = useLanguage();
-
   const goToHome = () => {
     history.push('/home')
   }
@@ -43,6 +45,24 @@ const Profile: React.FunctionComponent<Props> = ({
 
   const updateLanguage = (language: LanguageKey) => {
     dispatch(setLanguageAction(language))
+  }
+
+  const onClickEdit = () => {
+    history.push('/profileDetails')
+  }
+
+  const onClickSignOut = () => {
+    dispatch(setUserAction({
+      id: 0,
+      name: '',
+      username: '',
+      password: '',
+      phone: 0,
+      address: '',
+      email: '',
+      avatar: '',
+    }));
+    history.push('/')
   }
 
   return (
@@ -63,12 +83,12 @@ const Profile: React.FunctionComponent<Props> = ({
         <View style={[style.contentContainer, {paddingBottom: 10}]}>
           <View style={[style.container, {paddingBottom: 10, paddingLeft: 10}]}>
             <View style={[style.childContainer, style.leftContainer]}>
-                <Image source={ImagePath} style={[style.imageStyle, {borderRadius: 10}]}/>
+                <Image source={{uri: `http://192.168.1.2:3000/${constants.user.avatar}`}} style={[style.imageStyle, {borderRadius: 10}]}/>
             </View>
             <View style={[style.childContainer, style.centerContainer, style.extraContainer]}>
-              <ThemedText styleKey="textColor" style={{fontSize: 24, paddingTop: 10}}>Hoan</ThemedText>
+              <ThemedText styleKey="textColor" style={{fontSize: 24, paddingTop: 10}}>{constants.user.name}</ThemedText>
               <View style={[style.buttonStyle, {backgroundColor: theme.highlightColor}]}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={onClickEdit} >
                   <ThemedText styleKey="highlightTextColor" style={{fontSize: 18}}>Edit Account</ThemedText>
                 </TouchableOpacity>
               </View>
@@ -99,12 +119,12 @@ const Profile: React.FunctionComponent<Props> = ({
           </View>
         </View>
         <View style={[style.contentContainer, {paddingTop: 10, paddingBottom: 10}]}>
-          <View style={style.container}>
+          <View style={style.container} >
             <View style={[style.childContainer, style.leftContainer]}>
-            <ThemedText styleKey="textColor" style={{fontSize: 18}}>Sign Out</ThemedText>
+            <ThemedText styleKey="textColor" style={{fontSize: 18}} >Sign Out</ThemedText>
             </View>
             <View style={[style.childContainer, style.rightContainer]}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={onClickSignOut} >
                 <MaterialIcon name="exit-to-app" size={30} color={theme.dangerColor} style={{paddingTop: 5}}/>
               </TouchableOpacity>
             </View>

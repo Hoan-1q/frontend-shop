@@ -9,6 +9,7 @@ import useTheme from "../../hooks/useTheme";
 import CategoryList from './CategoryList'
 import ListedItem from './ListedItem'
 import ProductAdvertisement from './ProductAdvertisement';
+import { connect } from 'react-redux';
 
 interface Props extends RouteComponentProps {
     dispatch: Dispatch,
@@ -19,23 +20,25 @@ interface Props extends RouteComponentProps {
 const advertisementImage = require("../../images/shoppingFlipkart.jpg")
 
 const Shopping: React.FunctionComponent<Props> = ({
+    dispatch,
     history
 }: Props) => {
     const constants: AppConstants = useConstants();
     const theme: AppTheme = useTheme();
 
+
     return (
         <View style={style.mainContainer}>
             <View style={style.firstView}>
-                <CategoryList />
+                <CategoryList data={constants.categories} />
             </View>
             <View style={style.secondView}>
                 <ScrollView style={style.listingItem}>
                     <View style={style.items}>
-                        <ListedItem history={history}/>
+                        <ListedItem history={history} productList={constants.products}/>
                     </View>
                     <View style={style.items}>
-                        <ListedItem history={history}/>
+                        <ListedItem history={history} productList={constants.products}/>
                     </View>
                     <View style={style.items}>
                         <ProductAdvertisement
@@ -47,10 +50,10 @@ const Shopping: React.FunctionComponent<Props> = ({
                         />
                     </View>
                     <View style={style.items}>
-                        <ListedItem history={history}/>
+                        <ListedItem history={history} productList={constants.products}/>
                     </View>
                     <View style={style.items}>
-                        <ListedItem history={history}/>
+                        <ListedItem history={history} productList={constants.products}/>
                     </View>
                 </ScrollView>
             </View>
@@ -59,7 +62,7 @@ const Shopping: React.FunctionComponent<Props> = ({
     )
 };
 
-export default Shopping;
+export default connect(({ dispatch}) => ({ dispatch }))(Shopping);
 
 interface Style {
     mainContainer: ViewStyle;

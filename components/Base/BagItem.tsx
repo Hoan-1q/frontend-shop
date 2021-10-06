@@ -9,22 +9,23 @@ import {
   ImageStyle,
 } from 'react-native';
 import useTheme from '../../hooks/useTheme';
-import {AppTheme, AppConstants} from '../../config/DefaultConfig';
+import {AppTheme, AppConstants, CartType} from '../../config/DefaultConfig';
 import ThemedText from '../UI/ThemedText';
 import useConstants from '../../hooks/useConstants';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 interface Props {
-  size: string;
-  color: string;
+  data: CartType
 }
 
 // @ts-ignore
 const ImagePath = require('../../images/shopping.jpg');
 
-const BagItem: React.FunctionComponent<Props> = ({size, color}: Props) => {
+const BagItem: React.FunctionComponent<Props> = ({data}: Props) => {
   const constants: AppConstants = useConstants();
   const theme: AppTheme = useTheme();
+
+  const { id, title, price, quantity } = data;
 
   return (
     <>
@@ -47,7 +48,7 @@ const BagItem: React.FunctionComponent<Props> = ({size, color}: Props) => {
                 style.extraStyle,
               ]}>
               <ThemedText styleKey="textColor" style={style.content}>
-                Top Heavy Bag
+                {title}
               </ThemedText>
             </View>
             <View
@@ -62,7 +63,7 @@ const BagItem: React.FunctionComponent<Props> = ({size, color}: Props) => {
             </View>
           </View>
           <View style={[style.container, {paddingTop: 20}]}>
-            <View
+            {/* <View
               style={[style.childContainer, style.leftContainer, {flex: 1}]}>
               <ThemedText styleKey="lightTextColor" style={[style.content]}>
                 Size
@@ -73,7 +74,7 @@ const BagItem: React.FunctionComponent<Props> = ({size, color}: Props) => {
               <ThemedText styleKey="lightTextColor" style={[style.content]}>
                 Color
               </ThemedText>
-            </View>
+            </View> */}
             <View
               style={[style.childContainer, style.leftContainer, {flex: 1}]}>
               <ThemedText styleKey="lightTextColor" style={[style.content]}>
@@ -82,7 +83,7 @@ const BagItem: React.FunctionComponent<Props> = ({size, color}: Props) => {
             </View>
           </View>
           <View style={style.container}>
-            <View
+            {/* <View
               style={[style.childContainer, style.leftContainer, {flex: 1}]}>
               <ThemedText
                 styleKey="textColor"
@@ -98,13 +99,13 @@ const BagItem: React.FunctionComponent<Props> = ({size, color}: Props) => {
                 color={color}
                 style={{paddingLeft: 10}}
               />
-            </View>
+            </View> */}
             <View
               style={[style.childContainer, style.leftContainer, {flex: 1}]}>
               <ThemedText
                 styleKey="textColor"
                 style={[style.content, {paddingLeft: 7}]}>
-                1
+                {quantity}
               </ThemedText>
             </View>
           </View>

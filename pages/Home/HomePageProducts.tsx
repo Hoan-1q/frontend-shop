@@ -35,7 +35,7 @@ const HomePageProducts: React.FunctionComponent<Props> = ({
     return (
         <View style={style.secondView}>
             <View style={style.typeList}>
-                {/* <CategoryList /> */}
+                <CategoryList data={constants.categories} />
             </View>
             <View style={style.newItemList}>
                 <View style={style.newItemListLabel}>

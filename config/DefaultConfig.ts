@@ -33,10 +33,46 @@ export interface advertisementType {
     labelBuy: string,
 }
 
+export interface userType {
+  id: number,
+  name: string,
+  username: string,
+  password: string,
+  phone: string,
+  address: string,
+  email: string,
+  avatar: string,
+}
+
+export interface productsType {
+  id: number,
+  avatar: string,
+  price: number,
+  title: string
+}
+
+export interface CartType {
+  id: number,
+  title: string,
+  price: number,
+  quantity: number,
+}
+
+
+export interface CategoryType {
+  id: number,
+  name: string,
+}
+
+
 export interface AppConstants {
     selectedTheme: ThemeKey,
     selectedLanguage: LanguageKey,
     title: string,
+    user: userType,
+    carts: CartType[],
+    products: productsType[],
+    categories: CategoryType[],
     recraftLogo: string,
     homePage: HomePageType,
     advertisement: advertisementType,
@@ -55,6 +91,19 @@ export const defaultConfig: ApplicationConfig = {
       selectedLanguage: LanguageKey.en,
       title: "RecraftShoppify",
       recraftLogo: Logo,
+      user: {
+        id: 0,
+        name: '',
+        username: '',
+        password: '',
+        phone: 0,
+        address: '',
+        email: '',
+        avatar: '',
+      },
+      products: [],
+      carts: [],
+      categories: [],
       homePage: {
         productLabel: "NEW",
         labelViewAll: "View All",

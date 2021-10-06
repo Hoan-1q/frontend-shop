@@ -1,22 +1,26 @@
 import React, { useState } from 'react';
 import { RouteComponentProps } from 'react-router-native';
 import { Dispatch } from 'redux';
-import { View, ViewStyle, StyleSheet, TextStyle, ImageBackground, Text, Dimensions, TouchableOpacity, Image } from 'react-native';
-import { AppConstants, AppTheme } from '../../config/DefaultConfig';
+import { View, ViewStyle, StyleSheet, TextStyle, ImageBackground, Text, Dimensions, TouchableOpacity, Image, ScrollView } from 'react-native';
+import { AppConstants, AppTheme, productsType } from '../../config/DefaultConfig';
 import useConstants from '../../hooks/useConstants';
 import RoundButton from '../../components/Base/RoundButton';
 import useTheme from "../../hooks/useTheme";
-// import CarouselComponent from '../../components/common/Carousel';
+import CarouselComponent from '../../components/common/Carousel';
 import BackButton from '../../components/common/BackButton';
 import CommonModal from '../../components/Modal/CommonModal';
 import { AppLanguage } from '../../config/languages';
 import useLanguage from '../../hooks/useLanguage';
+import { getProductsByID } from '../../store/api/products';
+import { connect } from 'react-redux';
+import { pushDataToCarts } from '../../store/reducers/config';
 
 var screenWidth = Dimensions.get('window').width; //full width
 
 interface Props extends RouteComponentProps {
     dispatch: Dispatch,
-    history
+    history: any,
+    location: any,
 }
 
 // @ts-ignore
@@ -34,12 +38,27 @@ const productData = {
 }
 
 const ProductDetails: React.FunctionComponent<Props> = ({
-    history
+    dispatch,
+    history,
+    location,
 }: Props) => {
     const constants: AppConstants = useConstants();
     const theme: AppTheme = useTheme();
     const language: AppLanguage = useLanguage();
     const [open, setOpen] = useState(false);
+    const [dataProduct, setDataProduct] = useState({});
+    const [quatity, setQuatity] = useState(1);
+    
+    React.useEffect(() => {
+        const { id } = location.state
+        async function fetchMyAPI() {
+        const data = await getProductsByID(id);
+        setDataProduct(data[0]);
+        // dispatch(setProductsAction(data));
+        }
+
+        fetchMyAPI()
+    }, [])
 
     const backButton = () => {
         console.log('test');
@@ -50,9 +69,24 @@ const ProductDetails: React.FunctionComponent<Props> = ({
         history.push('/checkout/')
     }
 
-    const openModal = () => {
+    const onClickAddToCart = () => {
+        const { id } = location.state
+        const { price, title } = dataProduct as any
+        dispatch(pushDataToCarts({ 
+            id,
+            title,
+            price,
+            quatity,
+         }))
+        console.log(constants.carts);
         setOpen(true)
+
+
     }
+
+    // const openModal = () => {
+        
+    // }
 
     const closeModal = () => {
         setOpen(false)
@@ -83,40 +117,62 @@ const ProductDetails: React.FunctionComponent<Props> = ({
         }))
     }
 
+    const dataImage = [
+        {
+            url: 'http://192.168.1.2:3000/1.jpg'
+        },
+        {
+            url: 'http://192.168.1.2:3000/1.jpg'
+        },
+        {
+            url: 'http://192.168.1.2:3000/1.jpg'
+        },
+    ]
+
+    const { price, amount, content, title, images } = dataProduct as any
+
+    const imagesArray = images.split(",");
+
 
 
     return (
-        <View style={style.mainContainer}>
-            <BackButton onPress={backButton} />
-            <View style={style.row1}>
-                <Image style={[style.newItem]} source={ImagePath} />
-                {/* <CarouselComponent>
-                    {renderImageList(productData.images)}
-                </CarouselComponent> */}
-            </View>
-            <View style={style.row2}>
-                <View style={style.row2_Child}>
-                    <Text style={style.productName}>{productData.name}</Text>
-                    <Text style={style.productPrice}>{productData.price}</Text>
-                    {/* {selectColors(productData.color)} */}
-                    {/* {selectSizes(productData.size)} */}
+            <View style={style.mainContainer}>
+                <BackButton onPress={backButton} />
+                <ScrollView>
+                <View style={style.row1}>
+                    {/* <Image style={[style.newItem]} source={ImagePath} /> */}
+                    <CarouselComponent data={imagesArray} />
                 </View>
 
+                    <View style={style.row2}>
+                        <View style={style.row2_Child}>
+                            <Text style={style.productName}>{title}</Text>
+                            <Text style={style.productPrice}>{price}</Text>
+                            <Text style={style.productPrice}>{content}</Text>
+                            {/* {selectColors(productData.color)} */}
+                            {/* {selectSizes(productData.size)} */}
+                        </View>
+
+                    </View>
+
+                <View style={style.row3}>
+                    {amount > 0 
+                    ? <RoundButton label={language.labelAddToCard} buttonStyle={[style.productButton, {backgroundColor: theme.highlightColor}]} onPress={onClickAddToCart}/>
+                    : <RoundButton label="Sold out" buttonStyle={[style.productButton, {backgroundColor: theme.highlightColor}]} disable={true}/>
+                }
+                    <RoundButton label={language.labelBuyNow} buttonStyle={[style.productButton, {backgroundColor: theme.highlightColor}]} onPress={checkout}/>
+                </View>
+                </ScrollView>
+                <CommonModal 
+                    isOpen={open}
+                    hideModal={closeModal}
+                    submit={checkout}
+                />
             </View>
-            <View style={style.row3}>
-                <RoundButton label={language.labelAddToCard} buttonStyle={[style.productButton, {backgroundColor: theme.highlightColor}]} onPress={openModal}/>
-                <RoundButton label={language.labelBuyNow} buttonStyle={[style.productButton, {backgroundColor: theme.highlightColor}]} onPress={checkout}/>
-            </View>
-            <CommonModal 
-                isOpen={open}
-                hideModal={closeModal}
-                submit={checkout}
-            />
-        </View>
     )
 };
 
-export default ProductDetails;
+export default connect(({ dispatch}) => ({ dispatch }))(ProductDetails);
 
 interface Style {
     mainContainer: ViewStyle;
@@ -137,10 +193,8 @@ interface Style {
 
 const style: Style = StyleSheet.create<Style>({
     mainContainer: {
-        padding: 0,
-        margin: 0,
         flex: 1,
-        zIndex: -1,
+        backgroundColor: 'transparent',
     },
     newItem: {
         marginLeft: 6,
@@ -152,9 +206,11 @@ const style: Style = StyleSheet.create<Style>({
     row1: {
         flex: 4,
         zIndex: -1,
+        paddingTop: 50,
     },
     row2: {
         flex: 3,
+        bottom: 5
     },
     carouselRow: {
         width: screenWidth,
@@ -208,7 +264,7 @@ const style: Style = StyleSheet.create<Style>({
         paddingLeft: 25,
         paddingRight: 25,
         position: 'absolute',
-        bottom: 15,
+        bottom: 1,
         flex: 1,
         width: '100%',
         alignItems: 'center',

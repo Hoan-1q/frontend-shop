@@ -1,7 +1,7 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router-native';
 import { connect } from "react-redux";
-import { setThemeAction } from '../../store/reducers/config';
+import { setCategoriesAction, setProductsAction, setThemeAction } from '../../store/reducers/config';
 import { Dispatch } from 'redux';
 import { AppTheme, AppConstants } from '../../config/DefaultConfig';
 import useConstants from '../../hooks/useConstants';
@@ -10,6 +10,7 @@ import RoundButton from '../../components/Base/RoundButton';
 import { View, ViewStyle, StyleSheet, TextStyle, ImageBackground, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ThemedText from '../../components/UI/ThemedText';
+import { getAllCategory, getAllProducts } from '../../store/api/products';
 
 // @ts-ignore
 const ImagePath = require("../../images/Recraftsoppify_app_dashboard.jpg");
@@ -33,6 +34,14 @@ const BaseHome: React.FunctionComponent<Props> = ({
   const goToLogin = () => {
     history.push('/login')
   }
+
+  // React.useEffect(() => {
+  //     async function fetchMyAPI() {
+     
+  //     }
+
+  //     fetchMyAPI()
+  // }, [])
 
   const updateTheme = (theme: AppTheme) => dispatch(setThemeAction(theme))
 

@@ -2,7 +2,7 @@ import { createStore, combineReducers } from "redux";
 import configReducer from "./reducers/config";
 
 const reducer = combineReducers({
-    configReducer
+    configReducer,
 })
 
 const store = createStore(

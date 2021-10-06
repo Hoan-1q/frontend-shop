@@ -12,7 +12,10 @@ import useTheme from '../../hooks/useTheme';
 import { AppLanguage } from '../../config/languages';
 import useLanguage from '../../hooks/useLanguage';
 import { Formik } from 'formik';
-
+import { setCategoriesAction, setProductsAction, setUserAction } from '../../store/reducers/config';
+import { connect } from 'react-redux';
+import { login } from '../../store/api/users';
+import { getAllCategory, getAllProducts } from '../../store/api/products';
 // @ts-ignore
 const ImagePath = require("../../images/Recraftsoppify_aap_bg_effect.png")
 
@@ -22,6 +25,7 @@ interface Props extends RouteComponentProps {
 }
 
 const Login: React.FunctionComponent<Props> = ({
+  dispatch,
   history
 }: Props) => {
   const constants: AppConstants = useConstants();
@@ -33,17 +37,18 @@ const Login: React.FunctionComponent<Props> = ({
   }
 
   const submitButton = async (values: {username: string, password: string}) => {
-    // const res = await fetch("http://192.168.1.3:3000/api/login",
-    // {
-    //     headers: {
-    //       'Accept': 'application/json',
-    //       'Content-Type': 'application/json'
-    //     },
-    //     method: "POST",
-    //     body: JSON.stringify({username: values.username, password: values.password})
-    // })
-    // console.log(res);
-    history.push('/home/')
+    const data = await login(values.username, values.password)
+    console.log(data);
+    if (data) {
+      console.log(data[0]);
+      dispatch(setUserAction(data[0]))
+      history.push('/home/')
+    }
+    const dataProduct = await getAllProducts();
+    const dataCategory = await getAllCategory();
+    console.log(dataProduct, dataCategory);
+    dispatch(setCategoriesAction(dataCategory));
+    dispatch(setProductsAction(dataProduct));
   }
 
   return (
@@ -57,15 +62,6 @@ const Login: React.FunctionComponent<Props> = ({
           onSubmit={values => submitButton(values) }
         >
           {({ handleChange, handleBlur, handleSubmit, values }) => (
-            // <View>
-            //   <TextInput
-            //     onChangeText={handleChange('email')}
-            //     onBlur={handleBlur('email')}
-            //     value={values.email}
-            //   />
-            //   <Button onPress={handleSubmit} title="Submit" />
-            // </View>
-
             <View style={style.container}>
 
               <View style={style.topContainer}>
@@ -121,7 +117,7 @@ const Login: React.FunctionComponent<Props> = ({
   )
 };
 
-export default Login;
+export default connect(({ dispatch}) => ({ dispatch }))(Login);
 
 interface Style {
   container: ViewStyle;

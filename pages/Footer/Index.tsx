@@ -19,12 +19,13 @@ const FooterNavigation: React.FunctionComponent<Props> = ({
     const constants: AppConstants = useConstants();
     const theme: AppTheme = useTheme();
 
+
     const goToLogin = () => {
         history.push('/login')
     }
 
     const backButton = () => {
-        history.push('/')
+        history.push('/home')
     }
 
     const goToShopping = () => {
@@ -45,8 +46,8 @@ const FooterNavigation: React.FunctionComponent<Props> = ({
 
     return (
         <View style={[style.container, {borderColor: theme.lightBottomColor, backgroundColor: theme.backgroundColor}]}>
-            <TouchableOpacity onPress={backButton}>
-                <View style={style.iconContainer}>
+            <TouchableOpacity onPress={backButton} >
+                <View style={style.iconContainer} >
                     <Icon name="home" size={30} color={theme.appColor} style={[style.Icon]} />
                     <Text style={[style.IconTitle, { color: theme.appColor }]}>{"Home"}</Text>
                 </View>
@@ -82,6 +83,7 @@ const FooterNavigation: React.FunctionComponent<Props> = ({
 export default FooterNavigation;
 
 interface Style {
+    active: ViewStyle,
     IconTitle: TextStyle;
     container: ViewStyle;
     title: TextStyle;
@@ -92,6 +94,9 @@ interface Style {
 }
 
 const style: Style = StyleSheet.create<Style>({
+    active: {
+        color: "#ec5c44",
+    },
     container: {
         flexDirection: 'row',
         justifyContent: "space-around",

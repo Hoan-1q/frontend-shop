@@ -9,6 +9,7 @@ interface Props {
     onPress?: (event: GestureResponderEvent) => void,
     buttonStyle?: any,
     labelStyle?: any,
+    disable?:boolean,
 };
 
 const RoundButton: React.FunctionComponent<Props> = ({
@@ -16,11 +17,12 @@ const RoundButton: React.FunctionComponent<Props> = ({
     label,
     buttonStyle,
     labelStyle,
+    disable,
 }: Props) => {
     const theme: AppTheme = useTheme();
 
     return (
-        <TouchableOpacity onPress={onPress}>
+        <TouchableOpacity onPress={onPress} disabled={disable}>
             <View style={[style.container, { shadowColor: theme.labelBgColor, backgroundColor: theme.appColor, borderColor: theme.lightBottomColor }, buttonStyle]}>
                 <ThemedText styleKey="highlightTextColor" style={[style.userNameStyle, labelStyle]}>{label}</ThemedText>
             </View>

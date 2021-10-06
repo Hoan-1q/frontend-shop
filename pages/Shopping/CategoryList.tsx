@@ -6,19 +6,23 @@ import useConstants from '../../hooks/useConstants';
 import RoundButton from '../../components/Base/RoundButton';
 import useTheme from "../../hooks/useTheme";
 
-interface Props extends RouteComponentProps {}
+interface Props extends RouteComponentProps {
+    data: any[],
+}
 
-const typeList = ["Headphone", "Chargers", "Phone Cases"]
+// const typeList = ["Headphone", "Chargers", "Phone Cases"]
 
-const CategoryList: React.FunctionComponent<Props> = ({}: Props) => {
+const CategoryList: React.FunctionComponent<Props> = ({
+    data
+}: Props) => {
     const constants: AppConstants = useConstants();
     const theme: AppTheme = useTheme();
 
     return (
         <View style={style.container}>
             <ScrollView style={style.typeList} horizontal={true} showsHorizontalScrollIndicator={false}>
-                {typeList.map((res, index) => {
-                    return <RoundButton key={index} buttonStyle={[style.typeListTab, { backgroundColor: theme.appColor, borderColor: theme.appColor }]} labelStyle={{ fontSize: 17, color: theme.highlightTextColor }} label={res} onPress={() => {alert(res)}} />
+                {data.map((res, index) => {
+                    return <RoundButton key={index} buttonStyle={[style.typeListTab, { backgroundColor: theme.appColor, borderColor: theme.appColor }]} labelStyle={{ fontSize: 17, color: theme.highlightTextColor }} label={res.name} onPress={() => {alert(res)}} />
                 })}
             </ScrollView>
         </View>

@@ -22,7 +22,11 @@ const Product: React.FunctionComponent<Props> = ({
 
     return (
         <TouchableOpacity key={key} style={[style.newItemBox, productStyle]} onPress={goToDetails}>
-            <Image style={[style.newItem]} source={imageUrl} />
+            <View style={[style.itemTitleView, { backgroundColor: theme.labelBgColor }]}>
+                <Text style={[style.itemTitleText, { color: theme.highlightTextColor }]}>{imageUrl}</Text>
+            </View>
+            
+            <Image style={[style.newItem]} source={{ uri: `http://192.168.1.2:3000/${imageUrl}`}} />
             {productLabel ? 
             <View style={[style.itemTitleView, { backgroundColor: theme.labelBgColor }]}>
                 <Text style={[style.itemTitleText, { color: theme.highlightTextColor }]}>{productLabel}</Text>
