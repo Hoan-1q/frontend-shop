@@ -18,6 +18,7 @@ import Payment from '../pages/Payment';
 import Checkout from '../pages/Checkout';
 import Profile from '../pages/Profile';
 import ProfileDetail from '../pages/Profile/profile-detail';
+import Address from '../pages/Address';
 
 interface Props {
   configReducer: ApplicationConfig;
@@ -38,6 +39,7 @@ const Router: React.FunctionComponent<Props> = ({configReducer}: Props) => {
               <Route exact path="/shopping/" component={Shopping} />
               <Route path="/productDetails/" component={ProductDetails} />
               <Route path="/bag/" component={Bag} />
+              <Route path="/Address/" component={Address} />
               <Route path="/payment/" component={Payment} />
               <Route path="/checkout/" component={Checkout} />
               <Route path="/profile/" component={Profile} />

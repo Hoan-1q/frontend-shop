@@ -18,7 +18,6 @@ const CarouselComponent: React.FunctionComponent<Props> = ({
     const carouselRef = React.useRef(null);
 
     React.useEffect(() => {
-        console.log(data);
         setEntries(data);
       }, []);
 

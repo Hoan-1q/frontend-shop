@@ -40,13 +40,11 @@ const Login: React.FunctionComponent<Props> = ({
     const data = await login(values.username, values.password)
     console.log(data);
     if (data) {
-      console.log(data[0]);
-      dispatch(setUserAction(data[0]))
+      dispatch(setUserAction(data))
       history.push('/home/')
     }
     const dataProduct = await getAllProducts();
     const dataCategory = await getAllCategory();
-    console.log(dataProduct, dataCategory);
     dispatch(setCategoriesAction(dataCategory));
     dispatch(setProductsAction(dataProduct));
   }

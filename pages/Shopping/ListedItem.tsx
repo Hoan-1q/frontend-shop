@@ -1,38 +1,22 @@
 import React from 'react';
 import { View, ViewStyle, StyleSheet, TextStyle, Text, ScrollView } from 'react-native';
-import { AppConstants, AppTheme, productsType } from '../../config/DefaultConfig';
+import { AppConstants, AppTheme, CategoryType, productsType } from '../../config/DefaultConfig';
 import useConstants from '../../hooks/useConstants';
 import useTheme from "../../hooks/useTheme";
 import Product from './Product';
 
 interface Props { 
     history: any;
+    category: CategoryType;
     productList: productsType[]
 }
-
-// const productList = [
-//     {
-//         name: "Apple AirPods Pro",
-//         price: 20,
-//         currency: '$'
-//     },
-//     {
-//         name: "Apple AirPods Pro",
-//         price: 30,
-//         currency: '$',
-//     },
-//     {
-//         name: "Apple AirPods Pro",
-//         price: 40,
-//         currency: '$',
-//     }
-// ]
 
 // @ts-ignore
 const ImagePath = require("../../images/shopping.jpg");
 
 
 const Shopping: React.FunctionComponent<Props> = ({
+    category,
     productList,
     history,
 }: Props) => {
@@ -50,12 +34,12 @@ const Shopping: React.FunctionComponent<Props> = ({
     return (
         <View style={style.newItemList}>
             <View style={style.newItemListLabel}>
-                <Text style={[style.leftLabel, { color: theme.labelBgColor }]}>{constants.homePage.productLabel}</Text>
+                <Text style={[style.leftLabel, { color: theme.labelBgColor }]}>{category.name}</Text>
             </View>
             <View style={style.newItemBoxContainer}>
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                    {productList.map((res, index) => {
-                        return (<View key={index}>
+                    {productList.filter((product) => (product.category_id === category.id)).map((res, index) => {
+                        return (<View key={res.id}>
                             <Product 
                                 imageUrl= {res.avatar}
                                 goToDetails={() => goToDetails(res.id)}

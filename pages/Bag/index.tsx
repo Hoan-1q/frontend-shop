@@ -54,13 +54,13 @@ const Bag: React.FunctionComponent<Props> = ({
             </View>
           </View>
         </View>
-        {/* {constants.carts.map((product, index) => (
+        {constants.carts && constants.carts.map((product, index) => (
           <View>
-            <BagItem data={product}/>
+            <BagItem data={product} index={index}/>
           </View>
-        ))} */}
-        <BagOption label={language.labelDelivery} total="Standard - Free" />
-        <BagOption label={language.labelTotal} total="$25.98" />
+        ))}
+        {/* <BagOption label={language.labelDelivery} total="Standard - Free" /> */}
+        <BagOption label={language.labelTotal} total={`${constants.carts.map((pro) => (pro.price)).reduce((a, b) => (a + b),0)} VND`} />
         <View style={style.footerContainer}>
           <View style={[style.childContainer, style.centerContainer]}>
             <View style={[style.checkoutButton, {backgroundColor: theme.highlightColor}]}>

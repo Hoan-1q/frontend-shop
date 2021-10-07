@@ -29,17 +29,25 @@ const Shopping: React.FunctionComponent<Props> = ({
 
     return (
         <View style={style.mainContainer}>
-            <View style={style.firstView}>
+            {/* <View style={style.firstView}>
                 <CategoryList data={constants.categories} />
-            </View>
+            </View> */}
             <View style={style.secondView}>
                 <ScrollView style={style.listingItem}>
-                    <View style={style.items}>
+                    {constants.categories.map((category) => (
+                        <>
+                            {constants.products.filter((pro) => (pro.category_id === category.id)).length > 0 
+                            && (
+                            <View style={style.items} key={category.id}>
+                                <ListedItem history={history} category={category} productList={constants.products}/>
+                            </View>
+                            )
+                            }
+                        </>
+                    ))}
+                    {/* <View style={style.items}>
                         <ListedItem history={history} productList={constants.products}/>
-                    </View>
-                    <View style={style.items}>
-                        <ListedItem history={history} productList={constants.products}/>
-                    </View>
+                    </View> */}
                     <View style={style.items}>
                         <ProductAdvertisement
                             imageUrl={advertisementImage}
@@ -49,12 +57,12 @@ const Shopping: React.FunctionComponent<Props> = ({
                             onPress={() => {alert("buy")}}
                         />
                     </View>
-                    <View style={style.items}>
+                    {/* <View style={style.items}>
                         <ListedItem history={history} productList={constants.products}/>
                     </View>
                     <View style={style.items}>
                         <ListedItem history={history} productList={constants.products}/>
-                    </View>
+                    </View> */}
                 </ScrollView>
             </View>
             <FooterNavigation history={history} />

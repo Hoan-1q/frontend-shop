@@ -8,30 +8,43 @@ import {
   Image,
   ImageStyle,
 } from 'react-native';
+import { Dispatch } from 'redux';
 import useTheme from '../../hooks/useTheme';
 import {AppTheme, AppConstants, CartType} from '../../config/DefaultConfig';
 import ThemedText from '../UI/ThemedText';
 import useConstants from '../../hooks/useConstants';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { connect } from 'react-redux';
+import { RouteComponentProps } from 'react-router-native';
+import { remoeCart } from '../../store/reducers/config';
 
 interface Props {
+  index: number,
   data: CartType
 }
 
-// @ts-ignore
-const ImagePath = require('../../images/shopping.jpg');
+interface Props extends RouteComponentProps {
+  dispatch: Dispatch,
+  history
+}
 
-const BagItem: React.FunctionComponent<Props> = ({data}: Props) => {
+// @ts-ignore
+
+const BagItem: React.FunctionComponent<Props> = ({data, index, dispatch}: Props) => {
   const constants: AppConstants = useConstants();
   const theme: AppTheme = useTheme();
 
-  const { id, title, price, quantity } = data;
+
+  const onPressRemove = (index: number) => {
+    dispatch(remoeCart(index));
+  }
+  const { id, title, price, quantity, avatar } = data;
 
   return (
     <>
       <View style={[style.container, {paddingTop: 20}]}>
         <View style={[style.childContainer, style.leftContainer]}>
-          <Image source={ImagePath} style={style.imageStyle} />
+          <Image source={{ uri: `http://192.168.1.2:3000/${avatar}`}} style={style.imageStyle} />
         </View>
         <View
           style={[
@@ -58,23 +71,12 @@ const BagItem: React.FunctionComponent<Props> = ({data}: Props) => {
                   name="trash-can-outline"
                   size={20}
                   color={theme.lightTextColor}
+                  onPress={() => onPressRemove(index)}
                 />
               </TouchableOpacity>
             </View>
           </View>
           <View style={[style.container, {paddingTop: 20}]}>
-            {/* <View
-              style={[style.childContainer, style.leftContainer, {flex: 1}]}>
-              <ThemedText styleKey="lightTextColor" style={[style.content]}>
-                Size
-              </ThemedText>
-            </View>
-            <View
-              style={[style.childContainer, style.leftContainer, {flex: 1}]}>
-              <ThemedText styleKey="lightTextColor" style={[style.content]}>
-                Color
-              </ThemedText>
-            </View> */}
             <View
               style={[style.childContainer, style.leftContainer, {flex: 1}]}>
               <ThemedText styleKey="lightTextColor" style={[style.content]}>
@@ -83,23 +85,6 @@ const BagItem: React.FunctionComponent<Props> = ({data}: Props) => {
             </View>
           </View>
           <View style={style.container}>
-            {/* <View
-              style={[style.childContainer, style.leftContainer, {flex: 1}]}>
-              <ThemedText
-                styleKey="textColor"
-                style={[style.content, {paddingLeft: 7}]}>
-                {size}
-              </ThemedText>
-            </View>
-            <View
-              style={[style.childContainer, style.leftContainer, {flex: 1}]}>
-              <MaterialIcon
-                name="circle"
-                size={15}
-                color={color}
-                style={{paddingLeft: 10}}
-              />
-            </View> */}
             <View
               style={[style.childContainer, style.leftContainer, {flex: 1}]}>
               <ThemedText
@@ -109,7 +94,7 @@ const BagItem: React.FunctionComponent<Props> = ({data}: Props) => {
               </ThemedText>
             </View>
           </View>
-          <View style={[style.container, {paddingTop: 20, paddingRight: 0}]}>
+          {/* <View style={[style.container, {paddingTop: 20, paddingRight: 0}]}>
             <View
               style={[
                 style.childContainer,
@@ -120,7 +105,7 @@ const BagItem: React.FunctionComponent<Props> = ({data}: Props) => {
                 $20.90
               </ThemedText>
             </View>
-          </View>
+          </View> */}
           <View style={[style.container, {paddingRight: 0}]}>
             <View
               style={[
@@ -129,7 +114,7 @@ const BagItem: React.FunctionComponent<Props> = ({data}: Props) => {
                 style.extraStyle,
               ]}>
               <ThemedText styleKey="textColor" style={style.content}>
-                $12.99
+                {`${price} VND`}
               </ThemedText>
             </View>
           </View>
@@ -139,7 +124,7 @@ const BagItem: React.FunctionComponent<Props> = ({data}: Props) => {
   );
 };
 
-export default BagItem;
+export default connect(({ dispatch }) => ({ dispatch }))(BagItem);
 
 interface Style {
   container: ViewStyle;

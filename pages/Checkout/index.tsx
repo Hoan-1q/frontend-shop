@@ -2,6 +2,7 @@ import React from 'react';
 import { RouteComponentProps } from 'react-router-native';
 import { AppTheme, AppConstants } from '../../config/DefaultConfig';
 import useConstants from '../../hooks/useConstants';
+import { Dispatch } from 'redux';
 import useTheme from "../../hooks/useTheme";
 import { View, ViewStyle, StyleSheet, TextStyle, TouchableOpacity, ScrollView, Image, ImageStyle } from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -9,8 +10,12 @@ import ThemedText from '../../components/UI/ThemedText';
 import BagOption from '../../components/Base/BagOption';
 import { AppLanguage } from '../../config/languages';
 import useLanguage from '../../hooks/useLanguage';
+import { createNewOrder } from '../../store/api/products';
+import { connect } from 'react-redux';
+import { setCart } from '../../store/reducers/config';
 
 interface Props extends RouteComponentProps {
+  dispatch: Dispatch;
   history
 }
 
@@ -18,6 +23,7 @@ interface Props extends RouteComponentProps {
 const ImagePath = require("../../images/shopping.jpg")
 
 const Checkout: React.FunctionComponent<Props> = ({
+  dispatch,
   history
 }: Props) => {
   const constants: AppConstants = useConstants();
@@ -30,6 +36,20 @@ const Checkout: React.FunctionComponent<Props> = ({
 
   const goToPayment = () => {
     history.push('/payment')
+  }
+
+  const goToAddress = () => {
+    history.push('/address')
+  }
+
+  const onPlace = async () => {
+    const { address, carts, user } = constants;
+    const total = carts.map((pro) => pro.price).reduce((a, b) => (a + b), 0);
+    const res = await createNewOrder(user, address, carts, total);
+    if (res) {
+      dispatch(setCart([]));
+      history.push('/shopping')
+    }
   }
 
   return (
@@ -51,25 +71,10 @@ const Checkout: React.FunctionComponent<Props> = ({
               <ThemedText styleKey="textColor" style={style.content}>Shipping</ThemedText>
             </View>
             <View style={[style.childContainer, style.centerContainer, {flex: 4}]}>
-              <ThemedText styleKey="textColor" style={[style.content, {alignSelf: 'flex-start'}]}>72 Van Chuong 2 Dong Da Ha Noi</ThemedText>
+              <ThemedText styleKey="textColor" style={[style.content, {alignSelf: 'flex-start'}]}>{constants.address}</ThemedText>
             </View>
             <View style={[style.childContainer, style.rightContainer, {flex: 1}]}>
-              <TouchableOpacity>
-                <MaterialIcon name="chevron-right" size={30} color={theme.textColor} />
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-        <View style={[style.contentContainer, {borderColor: theme.lightTextColor}]}>
-          <View style={[style.container, {paddingTop: 20 ,paddingBottom: 5}]}>
-            <View style={[style.childContainer, style.leftContainer, {flex: 2, paddingLeft: 5}]}>
-              <ThemedText styleKey="textColor" style={style.content}>Card</ThemedText>
-            </View>
-            <View style={[style.childContainer, style.centerContainer, {flex: 4}]}>
-              <ThemedText styleKey="textColor" style={[style.content, {alignSelf: 'flex-start'}]}>**************8564</ThemedText>
-            </View>
-            <View style={[style.childContainer, style.rightContainer, {flex: 1}]}>
-              <TouchableOpacity onPress={goToPayment}>
+              <TouchableOpacity onPress={goToAddress} >
                 <MaterialIcon name="chevron-right" size={30} color={theme.textColor} />
               </TouchableOpacity>
             </View>
@@ -81,43 +86,31 @@ const Checkout: React.FunctionComponent<Props> = ({
               <ThemedText styleKey="textColor" style={style.content}>Items</ThemedText>
             </View>
             <View style={[style.childContainer, style.centerContainer, {flex: 5}]}>
-              <View style={[style.container, {paddingTop: 0 ,paddingBottom: 10, paddingLeft: 0, paddingRight: 0, borderBottomWidth: 1, borderColor: '#b3b3b3'}]}>
-                <View style={[style.childContainer, style.leftContainer, {flex: 2}]}>
-                  <Image source={ImagePath} style={style.imageStyle}/>
+              {constants.carts.map((product) => (
+                <View style={[style.container, {paddingTop: 0 ,paddingBottom: 10, paddingLeft: 0, paddingRight: 0, borderBottomWidth: 1, borderColor: '#b3b3b3'}]}>
+                  <View style={[style.childContainer, style.leftContainer, {flex: 2}]}>
+                    <Image source={{ uri: `http://192.168.1.2:3000/${product.avatar}` }} style={style.imageStyle}/>
+                  </View>
+                  <View style={[style.childContainer, style.centerContainer, {flex: 2, justifyContent: 'flex-start'}]}>
+                    <ThemedText styleKey="textColor" style={style.smallContent}>{product.title}</ThemedText>
+                    <ThemedText styleKey="textColor" style={[style.content, {alignSelf: 'flex-start'}]}>{`${product.price} VND`}</ThemedText>
+                  </View>
+                  <View style={[style.childContainer, style.rightContainer, {flex: 1}]}>
+                    <TouchableOpacity>
+                      <MaterialIcon name="chevron-right" size={30} color={theme.textColor} />
+                    </TouchableOpacity>
+                  </View>
                 </View>
-                <View style={[style.childContainer, style.centerContainer, {flex: 2, justifyContent: 'flex-start'}]}>
-                  <ThemedText styleKey="textColor" style={style.smallContent}>Top Heavy Bag</ThemedText>
-                  <ThemedText styleKey="textColor" style={[style.content, {alignSelf: 'flex-start'}]}>$12.99</ThemedText>
-                </View>
-                <View style={[style.childContainer, style.rightContainer, {flex: 1}]}>
-                  <TouchableOpacity>
-                    <MaterialIcon name="chevron-right" size={30} color={theme.textColor} />
-                  </TouchableOpacity>
-                </View>
-              </View>
-              <View style={[style.container, {paddingTop: 10 ,paddingBottom: 10, paddingLeft: 0, paddingRight: 0}]}>
-                <View style={[style.childContainer, style.leftContainer, {flex: 2}]}>
-                  <Image source={ImagePath} style={style.imageStyle}/>
-                </View>
-                <View style={[style.childContainer, style.centerContainer, {flex: 2, justifyContent: 'flex-start'}]}>
-                  <ThemedText styleKey="textColor" style={style.smallContent}>Top Heavy Bag</ThemedText>
-                  <ThemedText styleKey="textColor" style={[style.content, {alignSelf: 'flex-start'}]}>$12.99</ThemedText>
-                </View>
-                <View style={[style.childContainer, style.rightContainer, {flex: 1}]}>
-                  <TouchableOpacity>
-                    <MaterialIcon name="chevron-right" size={30} color={theme.textColor} />
-                  </TouchableOpacity>
-                </View>
-              </View>
+              ))}
             </View>
           </View>
         </View>
-        <BagOption label={language.labelDelivery} total="$0.0" />
-        <BagOption label={language.labelSubTotal} total="$25.98" />
+        {/* <BagOption label={language.labelDelivery} total="$0.0" /> */}
+        <BagOption label={language.labelSubTotal} total={`${constants.carts.map((pro) => pro.price).reduce((a, b) => (a + b), 0)} VND`} />
         <View style={style.footerContainer}>
           <View style={[style.childContainer, style.centerContainer]}>
             <View style={[style.checkoutButton, {backgroundColor: theme.highlightColor}]}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={onPlace} disabled={constants.carts.length === 0} >
                 <ThemedText styleKey="highlightTextColor" style={style.checkoutStyle}>{language.labelPlace}</ThemedText>
               </TouchableOpacity>
             </View>
@@ -128,8 +121,7 @@ const Checkout: React.FunctionComponent<Props> = ({
   );
 };
 
-export default Checkout;
-
+export default connect(({ dispatch}) => ({ dispatch }))(Checkout);
 interface Style {
     mainContainer: ViewStyle;
     contentContainer: ViewStyle;

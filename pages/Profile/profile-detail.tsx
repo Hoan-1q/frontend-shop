@@ -38,18 +38,18 @@ const ProfileDetail: React.FunctionComponent<Props> = ({
 
     const handleChoosePhoto = () => {
         launchImageLibrary({ noData: true }, (response) => {
-          // console.log(response);
-          if (response) {
-            setPhoto(response);
-          }
+            // console.log(response);
+            if (response) {
+                setPhoto(response);
+            }
         });
-      };
+    };
 
     const submitButton = async (values: { name: string, password: string, email: string, address: string }) => {
         const { name, password, email, address } = values;
         const { phone, id, avatar } = constants.user;
         await editProfile(name, password, email, address, constants.user.id);
-        dispatch(setUserAction({name: name, password:password, phone: phone, id: id, avatar: avatar, address: address, email: email}))
+        dispatch(setUserAction({ name: name, password: password, phone: phone, id: id, avatar: avatar, address: address, email: email }))
         history.push('/profile')
     }
 
@@ -67,17 +67,20 @@ const ProfileDetail: React.FunctionComponent<Props> = ({
                 >
                     {({ handleChange, handleBlur, handleSubmit, values }) => (
                         <View style={style.container}>
+                            <View style={[style.childContainer, style.leftContainer]}>
+                                <Image source={{ uri: `http://192.168.1.2:3000/${avatar}` }} style={[style.imageStyle, { borderRadius: 10 }]} />
+                            </View>
                             <View style={style.topContainer}>
                                 <ThemedText styleKey="appColor" style={style.title}>Edit Profile</ThemedText>
                             </View>
                             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
                                 {photo && (
                                     <>
-                                    <Image
-                                        source={{ uri: photo }}
-                                        style={{ width: 50, height: 50 }}
-                                    />
-                                    <Button title="Upload Photo" onPress={() => {}} />
+                                        <Image
+                                            source={{ uri: photo }}
+                                            style={{ width: 50, height: 50 }}
+                                        />
+                                        <Button title="Upload Photo" onPress={() => { }} />
                                     </>
                                 )}
                                 <Button title="Choose Photo" onPress={handleChoosePhoto} />
@@ -149,7 +152,7 @@ const ProfileDetail: React.FunctionComponent<Props> = ({
     )
 };
 
-export default connect(({ dispatch}) => ({ dispatch }))(ProfileDetail);
+export default connect(({ dispatch }) => ({ dispatch }))(ProfileDetail);
 
 interface Style {
     mainContainer: ViewStyle,
@@ -162,10 +165,12 @@ interface Style {
     forgotPassword: TextStyle;
     title: TextStyle;
     Icon: TextStyle;
+    leftContainer: ViewStyle;
     iconContainer: ViewStyle;
     containerBg: ViewStyle;
     containerImage: ViewStyle;
     backIcon: ViewStyle;
+    imageStyle: imageStyle;
 }
 
 const style: Style = StyleSheet.create<Style>({
@@ -173,6 +178,14 @@ const style: Style = StyleSheet.create<Style>({
         flex: 1,
         backgroundColor: 'transparent',
     },
+    leftContainer: {
+        alignItems: "flex-start",
+        flex: 0,
+    },
+    imageStyle :{
+        width: 100,
+        height: 100,
+      },
     container: {
         flex: 1,
         paddingLeft: 35,
