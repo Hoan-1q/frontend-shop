@@ -10,13 +10,14 @@ import CarouselComponent from '../../components/common/Carousel';
 import BackButton from '../../components/common/BackButton';
 import CommonModal from '../../components/Modal/CommonModal';
 import Svg, { Rect } from 'react-native-svg';
-import ContentLoader from 'react-native-masked-loader';
 import { AppLanguage } from '../../config/languages';
 import useLanguage from '../../hooks/useLanguage';
 import { getProductsByID } from '../../store/api/products';
 import { connect } from 'react-redux';
-import { pushDataToCarts, setProductAction } from '../../store/reducers/config';
+import { pushDataToCarts, pushFavorite, setProductAction } from '../../store/reducers/config';
 import Carousel, { AdditionalParallaxProps, ParallaxImage } from 'react-native-snap-carousel';
+import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { serverIP } from '../../store/api/users';
 
 var screenWidth = Dimensions.get('window').width; //full width
 
@@ -36,8 +37,9 @@ const ProductDetails: React.FunctionComponent<Props> = ({
     const language: AppLanguage = useLanguage();
     const [open, setOpen] = useState(false);
     // const [dataProduct, setDataProduct] = useState({}) as any;
-    const [quatity, setQuatity] = useState(1);
+    const [quantity, setQuantity] = useState(1);
     const [loading, setLoading] = useState(true);
+    const [added, setAdded] = useState(false);
     const carouselRef = React.useRef(null);
 
     React.useEffect(() => {
@@ -69,13 +71,23 @@ const ProductDetails: React.FunctionComponent<Props> = ({
             title,
             price,
             avatar,
-            quatity,
+            quantity,
         }))
         setOpen(true)
     }
 
     const closeModal = () => {
         setOpen(false)
+    }
+
+    const onMinus = () => {
+        if (quantity > 1) {
+            setQuantity(quantity - 1)
+        } else setQuantity(1)
+    }
+
+    const onPlus = () => {
+        setQuantity(quantity + 1)
     }
 
     function getMaskedElement() {
@@ -94,7 +106,7 @@ const ProductDetails: React.FunctionComponent<Props> = ({
         return (
             <View style={style.item}>
                 <ParallaxImage
-                    source={{ uri: `http://192.168.1.2:3000/${item.item}` }}
+                    source={{ uri: `${serverIP}/${item.item}` }}
                     containerStyle={style.imageContainer}
                     style={style.image}
                     parallaxFactor={0.4}
@@ -102,6 +114,11 @@ const ProductDetails: React.FunctionComponent<Props> = ({
                 />
             </View>
         );
+    }
+
+    const onAddFavorite = () => {
+        setAdded(true)
+        dispatch(pushFavorite(constants.product));
     }
 
 
@@ -135,8 +152,18 @@ const ProductDetails: React.FunctionComponent<Props> = ({
 
                         <View style={style.row2}>
                             <View style={style.row2_Child}>
-                                <Text style={style.productName}>{title}</Text>
+                                <Text style={style.productName}>
+                                    {title}
+                                    {!added 
+                                    ? <MaterialIcon name="heart-outline" onPress={onAddFavorite} size={30} style={{marginBottom: 20}}/>
+                                    : <MaterialIcon name="heart" onPress={onAddFavorite} size={30} style={{marginBottom: 20}}/> }
+                                </Text>
                                 <Text style={style.productPrice}>{price} VND</Text>
+                                <Text>
+                                    <MaterialIcon name="minus-circle-outline" onPress={onMinus} size={30} style={{marginBottom: 20}}/>
+                                    <Text style={{margin: 20}} >{quantity}</Text>
+                                    <MaterialIcon name="plus-circle-outline" onPress={onPlus} size={30} style={{marginBottom: 20}}/>
+                                </Text>
                                 <Text style={style.content}>{content}</Text>
                                 {/* {selectColors(productData.color)} */}
                                 {/* {selectSizes(productData.size)} */}

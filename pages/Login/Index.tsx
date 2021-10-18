@@ -12,7 +12,7 @@ import useTheme from '../../hooks/useTheme';
 import { AppLanguage } from '../../config/languages';
 import useLanguage from '../../hooks/useLanguage';
 import { Formik } from 'formik';
-import { setCategoriesAction, setProductsAction, setUserAction } from '../../store/reducers/config';
+import { setCategoriesAction, setNews, setProductsAction, setUserAction } from '../../store/reducers/config';
 import { connect } from 'react-redux';
 import { login } from '../../store/api/users';
 import { getAllCategory, getAllProducts } from '../../store/api/products';
@@ -45,8 +45,11 @@ const Login: React.FunctionComponent<Props> = ({
     }
     const dataProduct = await getAllProducts();
     const dataCategory = await getAllCategory();
+    const Products = dataProduct as any[]
+    const dataNews = Products.map((pro) => pro.avatar)
     dispatch(setCategoriesAction(dataCategory));
     dispatch(setProductsAction(dataProduct));
+    dispatch(setNews(dataNews))
   }
 
   return (

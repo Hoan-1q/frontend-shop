@@ -1,7 +1,7 @@
 import React from 'react';
 import { RouteComponentProps } from 'react-router-native';
 import { Dispatch } from 'redux';
-import { View, ViewStyle, StyleSheet, TextStyle, TextInput, ImageBackground, TouchableOpacity, ScrollView, Image, Button } from 'react-native';
+import { View, ViewStyle, StyleSheet, TextStyle, TextInput, ImageBackground, TouchableOpacity, ScrollView, Image, Button, ImageStyle } from 'react-native';
 import { AppTheme, AppConstants } from '../../config/DefaultConfig';
 import ThemedText from '../../components/UI/ThemedText';
 import useConstants from '../../hooks/useConstants';
@@ -11,7 +11,7 @@ import useTheme from '../../hooks/useTheme';
 import { AppLanguage } from '../../config/languages';
 import useLanguage from '../../hooks/useLanguage';
 import { Formik } from 'formik';
-import { editProfile } from '../../store/api/users';
+import { editProfile, serverIP } from '../../store/api/users';
 import { launchImageLibrary } from 'react-native-image-picker';
 import { setUserAction } from '../../store/reducers/config';
 import { connect } from 'react-redux';
@@ -68,7 +68,7 @@ const ProfileDetail: React.FunctionComponent<Props> = ({
                     {({ handleChange, handleBlur, handleSubmit, values }) => (
                         <View style={style.container}>
                             <View style={[style.childContainer, style.leftContainer]}>
-                                <Image source={{ uri: `http://192.168.1.2:3000/${avatar}` }} style={[style.imageStyle, { borderRadius: 10 }]} />
+                                <Image source={{ uri: `${serverIP}/${avatar}` }} style={[style.imageStyle, { borderRadius: 10 }]} />
                             </View>
                             <View style={style.topContainer}>
                                 <ThemedText styleKey="appColor" style={style.title}>Edit Profile</ThemedText>
@@ -170,7 +170,7 @@ interface Style {
     containerBg: ViewStyle;
     containerImage: ViewStyle;
     backIcon: ViewStyle;
-    imageStyle: imageStyle;
+    imageStyle: ImageStyle;
 }
 
 const style: Style = StyleSheet.create<Style>({

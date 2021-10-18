@@ -17,6 +17,7 @@ import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router-native';
 import { remoeCart } from '../../store/reducers/config';
+import { serverIP } from '../../store/api/users';
 
 interface Props {
   index: number,
@@ -35,8 +36,8 @@ const BagItem: React.FunctionComponent<Props> = ({data, index, dispatch}: Props)
   const theme: AppTheme = useTheme();
 
 
-  const onPressRemove = (index: number) => {
-    dispatch(remoeCart(index));
+  const onPressRemove = (data) => {
+    dispatch(remoeCart(data));
   }
   const { id, title, price, quantity, avatar } = data;
 
@@ -44,7 +45,7 @@ const BagItem: React.FunctionComponent<Props> = ({data, index, dispatch}: Props)
     <>
       <View style={[style.container, {paddingTop: 20}]}>
         <View style={[style.childContainer, style.leftContainer]}>
-          <Image source={{ uri: `http://192.168.1.2:3000/${avatar}`}} style={style.imageStyle} />
+          <Image source={{ uri: `${serverIP}/${avatar}`}} style={style.imageStyle} />
         </View>
         <View
           style={[
@@ -71,7 +72,7 @@ const BagItem: React.FunctionComponent<Props> = ({data, index, dispatch}: Props)
                   name="trash-can-outline"
                   size={20}
                   color={theme.lightTextColor}
-                  onPress={() => onPressRemove(index)}
+                  onPress={() => onPressRemove(data)}
                 />
               </TouchableOpacity>
             </View>
@@ -80,7 +81,7 @@ const BagItem: React.FunctionComponent<Props> = ({data, index, dispatch}: Props)
             <View
               style={[style.childContainer, style.leftContainer, {flex: 1}]}>
               <ThemedText styleKey="lightTextColor" style={[style.content]}>
-                Qty
+                Quantity
               </ThemedText>
             </View>
           </View>

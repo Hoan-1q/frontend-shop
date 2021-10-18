@@ -19,6 +19,10 @@ import Checkout from '../pages/Checkout';
 import Profile from '../pages/Profile';
 import ProfileDetail from '../pages/Profile/profile-detail';
 import Address from '../pages/Address';
+import MyShop from '../pages/MyShop';
+import AddProduct from '../pages/MyShop/addProduct'
+import Favorite from '../pages/Favorite';
+import MyOrder from '../pages/MyOrder';
 
 interface Props {
   configReducer: ApplicationConfig;
@@ -38,12 +42,16 @@ const Router: React.FunctionComponent<Props> = ({configReducer}: Props) => {
               <Route exact path="/home/" component={Home} />
               <Route exact path="/shopping/" component={Shopping} />
               <Route path="/productDetails/" component={ProductDetails} />
+              <Route path="/myShop/" component={MyShop} />
+              <Route path="/myOrders/" component={MyOrder} />
+              <Route path="/addProduct/" component={AddProduct} />
               <Route path="/bag/" component={Bag} />
               <Route path="/Address/" component={Address} />
               <Route path="/payment/" component={Payment} />
               <Route path="/checkout/" component={Checkout} />
               <Route path="/profile/" component={Profile} />
               <Route path="/profileDetails/" component={ProfileDetail} />
+              <Route path="/favorite/" component={Favorite} />
             </Switch>
           </BackHandlerHOC>
         </NativeRouter>

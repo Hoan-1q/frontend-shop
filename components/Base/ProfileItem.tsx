@@ -9,12 +9,14 @@ interface Props {
     label: string,
     iconName: string,
     color: string,
+    onPress: () => void,
 };
 
 const ProfileItem: React.FunctionComponent<Props> = ({
     label,
     iconName,
     color,
+    onPress,
   }: Props) => {
     const theme: AppTheme = useTheme();
     return (
@@ -25,7 +27,7 @@ const ProfileItem: React.FunctionComponent<Props> = ({
                 <ThemedText styleKey="textColor" style={style.content}>{label}</ThemedText>
               </View>
               <View style={[style.childContainer, style.rightContainer]}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={onPress} >
                   <MaterialIcon name={iconName} size={30} color={color} style={style.icon}/>
                 </TouchableOpacity>
               </View>

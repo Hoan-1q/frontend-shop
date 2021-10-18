@@ -1,6 +1,7 @@
 import React from 'react';
 import { Dimensions, Platform, StyleSheet, Text, View } from 'react-native';
 import Carousel, { AdditionalParallaxProps, ParallaxImage } from 'react-native-snap-carousel';
+import { serverIP } from '../../../store/api/users';
 
 var width = Dimensions.get('window').width; //full width
 
@@ -26,7 +27,7 @@ const CarouselComponent: React.FunctionComponent<Props> = ({
         return (
             <View style={styles.item}>
                 <ParallaxImage
-                    source={{ uri: `http://192.168.1.2:3000/${item.item}` }}
+                    source={{ uri: `${serverIP}/${item.item}` }}
                     containerStyle={styles.imageContainer}
                     style={styles.image}
                     parallaxFactor={0.4}

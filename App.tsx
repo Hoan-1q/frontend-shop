@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react';
 import Router from './router';
 import {Provider} from 'react-redux';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import store from './store';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';

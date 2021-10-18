@@ -17,6 +17,7 @@ import { ThemeKey } from '../../config/themes';
 import { AppLanguage, LanguageKey } from '../../config/languages';
 import useLanguage from '../../hooks/useLanguage';
 import store from '../../store';
+import { serverIP } from '../../store/api/users';
 
 interface Props extends RouteComponentProps {
     dispatch: Dispatch,
@@ -51,6 +52,13 @@ const Profile: React.FunctionComponent<Props> = ({
     history.push('/profileDetails')
   }
 
+  const onMyShop = () => {
+    history.push('/myShop')
+  }
+  const onMyOrders = () => {
+    history.push('/myOrders')
+  }
+
   const onClickSignOut = () => {
     dispatch(setUserAction({
       id: 0,
@@ -83,7 +91,7 @@ const Profile: React.FunctionComponent<Props> = ({
         <View style={[style.contentContainer, {paddingBottom: 10}]}>
           <View style={[style.container, {paddingBottom: 10, paddingLeft: 10}]}>
             <View style={[style.childContainer, style.leftContainer]}>
-                <Image source={{uri: `http://192.168.1.2:3000/${constants.user.avatar}`}} style={[style.imageStyle, {borderRadius: 10}]}/>
+                <Image source={{uri: `${serverIP}/${constants.user.avatar}`}} style={[style.imageStyle, {borderRadius: 10}]}/>
             </View>
             <View style={[style.childContainer, style.centerContainer, style.extraContainer]}>
               <ThemedText styleKey="textColor" style={{fontSize: 24, paddingTop: 10}}>{constants.user.name}</ThemedText>
@@ -95,9 +103,9 @@ const Profile: React.FunctionComponent<Props> = ({
             </View>
           </View>
         </View>
-        <ProfileItem label="My Orders" iconName="chevron-right" color={theme.textColor} />
-        <ProfileItem label="Shipping Addresses" iconName="chevron-right" color={theme.textColor} />
-        <ProfileItem label="My Review" iconName="chevron-right" color={theme.textColor} />
+        <ProfileItem label="My Orders" iconName="chevron-right" color={theme.textColor} onPress={onMyOrders} />
+        <ProfileItem label="My Shop" iconName="chevron-right" color={theme.textColor} onPress={onMyShop}/>
+        <ProfileItem label="My Review" iconName="chevron-right" color={theme.textColor} onPress={() => {}}/>
         <View style={[style.contentContainer, {borderColor: theme.lightTextColor, borderBottomWidth: 1, paddingTop: 20, paddingBottom: 20}]}>
           <View style={style.container}>
             <View style={[style.childContainer, style.leftContainer]}>

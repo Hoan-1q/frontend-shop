@@ -2,6 +2,7 @@ import React from 'react';
 import { View, ViewStyle, StyleSheet, TextStyle, Image, Text, TouchableOpacity } from 'react-native';
 import { AppTheme } from '../../config/DefaultConfig';
 import useTheme from "../../hooks/useTheme";
+import { serverIP } from '../../store/api/users';
 
 interface Props {
     productLabel?: string,
@@ -22,7 +23,7 @@ const Product: React.FunctionComponent<Props> = ({
 
     return (
         <TouchableOpacity key={key} style={[style.newItemBox, productStyle]} onPress={goToDetails}>
-            <Image style={[style.newItem]} source={{ uri: `http://192.168.1.2:3000/${imageUrl}`}} />
+            <Image style={[style.newItem]} source={{ uri: `${serverIP}/${imageUrl}`}} />
             {productLabel ? 
             <View style={[style.itemTitleView, { backgroundColor: theme.labelBgColor }]}>
                 <Text style={[style.itemTitleText, { color: theme.highlightTextColor }]}>{productLabel}</Text>

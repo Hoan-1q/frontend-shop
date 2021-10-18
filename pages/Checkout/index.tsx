@@ -12,7 +12,8 @@ import { AppLanguage } from '../../config/languages';
 import useLanguage from '../../hooks/useLanguage';
 import { createNewOrder } from '../../store/api/products';
 import { connect } from 'react-redux';
-import { setCart } from '../../store/reducers/config';
+import { resetCart, setCart } from '../../store/reducers/config';
+import { serverIP } from '../../store/api/users';
 
 interface Props extends RouteComponentProps {
   dispatch: Dispatch;
@@ -47,7 +48,7 @@ const Checkout: React.FunctionComponent<Props> = ({
     const total = carts.map((pro) => pro.price).reduce((a, b) => (a + b), 0);
     const res = await createNewOrder(user, address, carts, total);
     if (res) {
-      dispatch(setCart([]));
+      dispatch(resetCart());
       history.push('/shopping')
     }
   }
@@ -89,7 +90,7 @@ const Checkout: React.FunctionComponent<Props> = ({
               {constants.carts.map((product) => (
                 <View style={[style.container, {paddingTop: 0 ,paddingBottom: 10, paddingLeft: 0, paddingRight: 0, borderBottomWidth: 1, borderColor: '#b3b3b3'}]}>
                   <View style={[style.childContainer, style.leftContainer, {flex: 2}]}>
-                    <Image source={{ uri: `http://192.168.1.2:3000/${product.avatar}` }} style={style.imageStyle}/>
+                    <Image source={{ uri: `${serverIP}/${product.avatar}` }} style={style.imageStyle}/>
                   </View>
                   <View style={[style.childContainer, style.centerContainer, {flex: 2, justifyContent: 'flex-start'}]}>
                     <ThemedText styleKey="textColor" style={style.smallContent}>{product.title}</ThemedText>
@@ -106,7 +107,7 @@ const Checkout: React.FunctionComponent<Props> = ({
           </View>
         </View>
         {/* <BagOption label={language.labelDelivery} total="$0.0" /> */}
-        <BagOption label={language.labelSubTotal} total={`${constants.carts.map((pro) => pro.price).reduce((a, b) => (a + b), 0)} VND`} />
+        <BagOption label={language.labelSubTotal} total={`${constants.carts.map((pro) => pro.price*pro.quantity).reduce((a, b) => (a + b), 0)} VND`} />
         <View style={style.footerContainer}>
           <View style={[style.childContainer, style.centerContainer]}>
             <View style={[style.checkoutButton, {backgroundColor: theme.highlightColor}]}>

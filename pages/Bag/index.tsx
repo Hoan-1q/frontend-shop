@@ -60,11 +60,11 @@ const Bag: React.FunctionComponent<Props> = ({
           </View>
         ))}
         {/* <BagOption label={language.labelDelivery} total="Standard - Free" /> */}
-        <BagOption label={language.labelTotal} total={`${constants.carts.map((pro) => (pro.price)).reduce((a, b) => (a + b),0)} VND`} />
+        <BagOption label={language.labelTotal} total={`${constants.carts.map((pro) => (pro.price*pro.quantity)).reduce((a, b) => (a + b),0)} VND`} />
         <View style={style.footerContainer}>
           <View style={[style.childContainer, style.centerContainer]}>
             <View style={[style.checkoutButton, {backgroundColor: theme.highlightColor}]}>
-              <TouchableOpacity onPress={goToCheckout}>
+              <TouchableOpacity onPress={goToCheckout} disabled={constants.carts.length===0} >
                 <ThemedText styleKey="highlightTextColor" style={style.checkoutStyle}>{language.shipLabel}</ThemedText>
               </TouchableOpacity>
             </View>
